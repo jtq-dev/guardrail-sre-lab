@@ -20,4 +20,4 @@ jobs:
       - name: Policy check (K8s + Terraform)
         run: |
           conftest test infra/k8s/manifests --policy policy/k8s
-          conftest test infra/terraform --policy policy/terraform
+          conftest test infra/terraform/manifests --policy policy/terraform
