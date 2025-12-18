@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-bad
+  name: demo-example-good
 spec:
   replicas: 1
   selector:
@@ -12,6 +12,17 @@ spec:
     spec:
       containers:
         - name: demo
-          image: demo-app:latest
+          image: demo-app:1.0.0
           ports:
             - containerPort: 8000
+          livenessProbe:
+            httpGet: { path: /health, port: 8000 }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet: { path: /health, port: 8000 }
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          resources:
+            requests: { cpu: "100m", memory: "128Mi" }
+            limits:   { cpu: "300m", memory: "256Mi" }
