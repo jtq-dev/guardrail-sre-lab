@@ -15,3 +15,9 @@ urls:
 	@echo "Prometheus:  http://localhost:9090"
 	@echo "Loki:        http://localhost:3100"
 	@echo "Demo App:    http://localhost:8000/hello  and /error"
+
+policy-k8s:
+	conftest test infra/k8s/manifests --policy policy/k8s
+
+demo-k8s:
+	conftest test infra/k8s/examples/bad-deploy.yaml --policy policy/k8s
