@@ -1,0 +1,34 @@
+groups:
+  - name: sre_lab
+    rules:
+      - alert: HighErrorRate
+        expr: |
+          (sum(rate(http_requests_total{status="500"}[5m])) /
+           sum(rate(http_requests_total[5m]))) > 0.05
+        for: 2m
+        labels: { severity: page }
+        annotations:
+          summary: "High error rate (>5%)"
+          description: "Too many 500s in the last 5 minutes."
+
+      - alert: P95LatencyTooHigh
+        expr: |
+          histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[5m]))) > 0.5
+        for: 2m
+        labels: { severity: warn }
+        annotations:
+          summary: "p95 latency > 0.5s"
+          description: "Latency is degrading."
+
+      - alert: ApdexTooLow
+        expr: |
+          (
+            sum(rate(http_request_duration_seconds_bucket{le="0.1"}[5m])) +
+            (sum(rate(http_request_duration_seconds_bucket{le="0.4"}[5m])) - sum(rate(http_request_duration_seconds_bucket{le="0.1"}[5m]))) / 2
+          )
+          / sum(rate(http_request_duration_seconds_count[5m])) < 0.85
+        for: 3m
+        labels: { severity: warn }
+        annotations:
+          summary: "Apdex < 0.85"
+          description: "User experience is getting worse."

@@ -1,0 +1,11 @@
+{
+  "name": "GuardRail SRE Lab",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y make curl && curl -sL https://github.com/open-policy-agent/conftest/releases/download/v0.60.0/conftest_0.60.0_Linux_x86_64.tar.gz -o /tmp/conftest.tgz && tar -xzf /tmp/conftest.tgz -C /tmp && sudo mv /tmp/conftest /usr/local/bin/conftest",
+  "forwardPorts": [3000, 9090, 8000],
+  "portsAttributes": {
+    "3000": { "label": "Grafana" },
+    "9090": { "label": "Prometheus" },
+    "8000": { "label": "Demo App" }
+  }
+}
